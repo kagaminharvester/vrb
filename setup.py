@@ -9,15 +9,21 @@ from pathlib import Path
 readme_file = Path(__file__).parent / "README.md"
 long_description = readme_file.read_text() if readme_file.exists() else ""
 
-# Read requirements
+# Read requirements with proper error handling
 requirements_file = Path(__file__).parent / "requirements.txt"
 requirements = []
-if requirements_file.exists():
-    with open(requirements_file) as f:
-        requirements = [
-            line.strip() for line in f
-            if line.strip() and not line.startswith('#')
-        ]
+try:
+    if requirements_file.exists():
+        with open(requirements_file, 'r', encoding='utf-8') as f:
+            requirements = [
+                line.strip() for line in f
+                if line.strip() and not line.startswith('#')
+            ]
+    else:
+        print(f"Warning: {requirements_file} not found. Installing with minimal dependencies.")
+except Exception as e:
+    print(f"Error reading requirements.txt: {e}")
+    print("Continuing with minimal dependencies...")
 
 setup(
     name="vr-body-segmentation",

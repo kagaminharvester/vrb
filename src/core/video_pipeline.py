@@ -407,20 +407,20 @@ class VRVideoSegmentationPipeline:
         try:
             if self.encoder:
                 self.encoder.finalize()
-        except:
-            pass
+        except Exception as e:
+            logger.warning(f"Error during encoder cleanup: {e}")
 
         try:
             if self.mask_encoder:
                 self.mask_encoder.finalize()
-        except:
-            pass
+        except Exception as e:
+            logger.warning(f"Error during mask_encoder cleanup: {e}")
 
         try:
             if self.decoder:
                 self.decoder.stop()
-        except:
-            pass
+        except Exception as e:
+            logger.warning(f"Error during decoder cleanup: {e}")
 
     def stop(self) -> None:
         """Stop processing."""

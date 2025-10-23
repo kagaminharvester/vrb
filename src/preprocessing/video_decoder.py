@@ -58,14 +58,14 @@ class FrameBuffer:
         try:
             self.queue.put(item, timeout=timeout)
             return True
-        except:
+        except queue.Full:
             return False
 
     def get(self, timeout: float = 1.0) -> Optional[Any]:
         """Get item from buffer."""
         try:
             return self.queue.get(timeout=timeout)
-        except:
+        except queue.Empty:
             return None
 
     def is_empty(self) -> bool:
@@ -93,7 +93,7 @@ class FrameBuffer:
         while not self.queue.empty():
             try:
                 self.queue.get_nowait()
-            except:
+            except queue.Empty:
                 break
 
 

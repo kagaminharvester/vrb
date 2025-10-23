@@ -1,7 +1,11 @@
 #!/bin/bash
 # Setup script for VR Body Segmentation Application
 
-set -e
+# Exit on error, undefined variables, and pipe failures
+set -euo pipefail
+
+# Allow user to override Python command
+PYTHON_CMD="${PYTHON_CMD:-python3}"
 
 echo "============================================"
 echo "VR Body Segmentation - Setup Script"
@@ -10,24 +14,47 @@ echo ""
 
 # Check Python version
 echo "Checking Python version..."
-python_version=$(python3 --version 2>&1 | awk '{print $2}')
+if ! command -v "$PYTHON_CMD" &> /dev/null; then
+    echo "ERROR: $PYTHON_CMD not found. Please install Python 3.10+ or set PYTHON_CMD environment variable."
+    exit 1
+fi
+
+python_version=$("$PYTHON_CMD" --version 2>&1 | awk '{print $2}')
+major_version=$(echo "$python_version" | cut -d. -f1)
+minor_version=$(echo "$python_version" | cut -d. -f2)
+
 echo "Found Python $python_version"
+
+if [ "$major_version" -lt 3 ] || ([ "$major_version" -eq 3 ] && [ "$minor_version" -lt 10 ]); then
+    echo "ERROR: Python 3.10+ is required. Found Python $python_version"
+    exit 1
+fi
 
 # Check for CUDA
 echo ""
 echo "Checking CUDA installation..."
 if command -v nvidia-smi &> /dev/null; then
     echo "NVIDIA GPU detected:"
-    nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+    nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader
+
+    # Check CUDA version
+    if command -v nvcc &> /dev/null; then
+        cuda_version=$(nvcc --version | grep "release" | awk '{print $5}' | cut -d, -f1)
+        echo "CUDA Compiler: $cuda_version"
+    else
+        echo "WARNING: nvcc not found. CUDA toolkit may not be installed."
+    fi
 else
-    echo "WARNING: nvidia-smi not found. GPU acceleration may not be available."
+    echo "ERROR: nvidia-smi not found. This application requires an NVIDIA GPU."
+    echo "If you have an NVIDIA GPU, please install the NVIDIA drivers."
+    exit 1
 fi
 
 # Create virtual environment
 echo ""
 echo "Creating virtual environment..."
 if [ ! -d "venv" ]; then
-    python3 -m venv venv
+    "$PYTHON_CMD" -m venv venv
     echo "Virtual environment created."
 else
     echo "Virtual environment already exists."
@@ -41,29 +68,36 @@ source venv/bin/activate
 # Upgrade pip
 echo ""
 echo "Upgrading pip..."
-pip install --upgrade pip
+pip install --upgrade pip setuptools wheel
 
 # Install PyTorch with CUDA support
 echo ""
 echo "Installing PyTorch with CUDA support..."
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 
-# Install other dependencies
+# Install all dependencies from requirements.txt
 echo ""
-echo "Installing other dependencies..."
-pip install pyyaml rich matplotlib seaborn psutil
+echo "Installing dependencies from requirements.txt..."
+if [ -f "requirements.txt" ]; then
+    pip install -r requirements.txt
+else
+    echo "ERROR: requirements.txt not found!"
+    exit 1
+fi
 
 # Verify installation
 echo ""
 echo "Verifying installation..."
-python3 -c "import torch; print(f'PyTorch version: {torch.__version__}')"
-python3 -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}')"
+"$PYTHON_CMD" -c "import torch; print(f'PyTorch version: {torch.__version__}')"
+"$PYTHON_CMD" -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}')"
 
-if python3 -c "import torch; exit(0 if torch.cuda.is_available() else 1)"; then
-    python3 -c "import torch; print(f'CUDA version: {torch.version.cuda}')"
-    python3 -c "import torch; print(f'GPU: {torch.cuda.get_device_name(0)}')"
+if "$PYTHON_CMD" -c "import torch; exit(0 if torch.cuda.is_available() else 1)"; then
+    "$PYTHON_CMD" -c "import torch; print(f'CUDA version: {torch.version.cuda}')"
+    "$PYTHON_CMD" -c "import torch; print(f'GPU: {torch.cuda.get_device_name(0)}')"
 else
-    echo "WARNING: CUDA not available in PyTorch"
+    echo "ERROR: CUDA not available in PyTorch. Installation failed."
+    echo "Please ensure CUDA toolkit and drivers are properly installed."
+    exit 1
 fi
 
 # Create necessary directories
@@ -87,7 +121,11 @@ echo ""
 echo "============================================"
 echo "Hardware Configuration"
 echo "============================================"
-python3 cli.py --show-hardware
+if [ -f "cli.py" ]; then
+    "$PYTHON_CMD" cli.py --show-hardware || echo "Warning: Could not display hardware info"
+else
+    echo "Warning: cli.py not found, skipping hardware display"
+fi
 
 echo ""
 echo "============================================"

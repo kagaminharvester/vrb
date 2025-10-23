@@ -43,7 +43,8 @@ class LRUCache:
         try:
             import sys
             return sys.getsizeof(obj)
-        except:
+        except (TypeError, AttributeError):
+            # Object doesn't support sizeof
             return 0
 
     def get(self, key: str) -> Optional[Any]:
@@ -142,7 +143,8 @@ class DiskCache:
             try:
                 with open(self.index_file, 'rb') as f:
                     return pickle.load(f)
-            except:
+            except (FileNotFoundError, pickle.UnpicklingError, EOFError) as e:
+                # Cache file corrupted or missing, start fresh
                 return {}
         return {}
 

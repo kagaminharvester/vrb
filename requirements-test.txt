@@ -1,4 +1,6 @@
 # Test Dependencies for VR Body Segmentation
+# Note: Install base requirements.txt first, then this file
+# This file only contains testing-specific dependencies
 
 # Testing Framework
 pytest>=7.0.0
@@ -7,25 +9,6 @@ pytest-html>=3.1.1
 pytest-xdist>=3.0.0           # Parallel test execution
 pytest-timeout>=2.1.0         # Test timeouts
 pytest-benchmark>=4.0.0       # Performance benchmarking
-
-# Computer Vision
-opencv-python>=4.5.0
-opencv-contrib-python>=4.5.0  # Additional OpenCV modules
-
-# Deep Learning
-torch>=2.0.0
-torchvision>=0.15.0
-
-# Numerical Computing
-numpy>=1.20.0
-
-# System Monitoring
-psutil>=5.8.0                 # CPU/Memory monitoring
-py3nvml>=0.2.7                # GPU monitoring (NVIDIA)
-
-# Utilities
-Pillow>=9.0.0                 # Image processing
-tqdm>=4.60.0                  # Progress bars
 
 # Code Quality (optional but recommended)
 black>=22.0.0                 # Code formatting
@@ -36,3 +19,6 @@ mypy>=0.950                   # Type checking
 # Documentation
 sphinx>=4.5.0                 # Documentation generation
 sphinx-rtd-theme>=1.0.0       # Read the Docs theme
+
+# Note: Core dependencies (numpy, opencv, torch, psutil, Pillow, tqdm, etc.)
+# are inherited from requirements.txt - DO NOT redefine them here to avoid version conflicts
