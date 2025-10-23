@@ -1,0 +1,62 @@
+# Fast Profile - Optimized for maximum speed
+# Target: 120+ FPS, lower quality, minimal latency
+
+profile: fast
+
+gpu:
+  device_id: 0
+  max_vram_usage: 0.85
+  precision: fp16  # FP16 for speed
+  cudnn_benchmark: true
+  cudnn_deterministic: false
+  allow_tf32: true
+  memory_fraction: null
+
+model:
+  name: sam2_hiera_small  # Use smaller model
+  checkpoint_path: null
+  config_path: null
+  batch_size: 16  # Larger batch for throughput
+  input_size: [512, 512]  # Lower resolution
+  num_workers: 8
+  prefetch_factor: 4
+
+processing:
+  num_threads: 64  # Use more threads
+  max_queue_size: 200
+  frame_skip: 0
+  use_multiprocessing: true
+  chunk_size: 200
+  enable_caching: true
+  cache_size_gb: 8.0
+
+performance:
+  target_fps: 120
+  max_latency_ms: 30.0
+  enable_profiling: false
+  auto_tune: true
+  warmup_iterations: 5
+  benchmark_mode: false
+
+output:
+  format: mp4
+  codec: h264_nvenc
+  bitrate: 30M  # Lower bitrate
+  save_masks: false  # Skip mask saving for speed
+  save_visualizations: true
+  output_dir: ./output
+
+logging:
+  level: WARNING  # Less logging
+  log_dir: ./logs
+  json_logging: false
+  console_output: true
+  file_output: true
+  max_log_size_mb: 10
+  backup_count: 3
+
+vr:
+  stereoscopic: true
+  ipd: 63.0
+  process_both_eyes: true
+  eye_separation_method: split

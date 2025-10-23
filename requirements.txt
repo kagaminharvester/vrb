@@ -1,0 +1,136 @@
+# VR Body Segmentation Application
+# Complete Dependencies for RTX 3090 + AMD Threadripper 3990X
+# Python 3.10+ Required
+
+# ============================================================================
+# CORE DEEP LEARNING FRAMEWORKS
+# ============================================================================
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# ============================================================================
+# GPU ACCELERATION (CUDA)
+# ============================================================================
+cupy-cuda12x>=12.0.0  # CUDA Python bindings (adjust version for your CUDA)
+pycuda>=2022.2  # Low-level CUDA access
+nvidia-ml-py3>=11.525.84  # NVIDIA Management Library (GPU monitoring)
+
+# ============================================================================
+# TENSORRT (Inference Optimization)
+# ============================================================================
+# TensorRT requires manual installation from NVIDIA
+# Option 1: Install from NVIDIA PyPI
+# pip install tensorrt --extra-index-url https://pypi.nvidia.com
+# Option 2: Download from https://developer.nvidia.com/tensorrt
+# tensorrt>=8.6.0
+
+# ============================================================================
+# ONNX (Model Conversion)
+# ============================================================================
+onnx>=1.14.0
+onnxruntime-gpu>=1.15.0
+
+# ============================================================================
+# COMPUTER VISION
+# ============================================================================
+opencv-python>=4.8.0
+opencv-contrib-python>=4.8.0
+Pillow>=10.0.0
+
+# ============================================================================
+# SEGMENTATION MODELS
+# ============================================================================
+segment-anything>=1.0  # Meta's SAM model
+timm>=0.9.0  # PyTorch Image Models
+
+# ============================================================================
+# VIDEO PROCESSING
+# ============================================================================
+ffmpeg-python>=0.2.0
+av>=10.0.0
+
+# ============================================================================
+# SCIENTIFIC COMPUTING
+# ============================================================================
+numpy>=1.24.0
+scipy>=1.10.0
+numba>=0.57.0  # JIT compilation
+
+# ============================================================================
+# SYSTEM MONITORING & PROFILING
+# ============================================================================
+psutil>=5.9.0  # CPU/Memory/Process monitoring
+py3nvml>=0.2.7  # NVIDIA GPU monitoring
+
+# ============================================================================
+# CONFIGURATION & UTILITIES
+# ============================================================================
+PyYAML>=6.0
+python-dotenv>=1.0.0
+dataclasses-json>=0.5.0
+tqdm>=4.65.0
+
+# ============================================================================
+# CLI & USER INTERFACE
+# ============================================================================
+rich>=13.0.0  # Beautiful terminal UI
+colorlog>=6.7.0  # Colored logging
+
+# ============================================================================
+# VISUALIZATION & ANALYSIS
+# ============================================================================
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# ============================================================================
+# LOGGING & MONITORING
+# ============================================================================
+loguru>=0.7.0
+# wandb>=0.15.0  # Optional: Experiment tracking
+
+# ============================================================================
+# TESTING (Install with: pip install -r requirements-test.txt)
+# ============================================================================
+# pytest>=7.3.0
+# pytest-cov>=4.1.0
+# pytest-html>=3.1.1
+# pytest-xdist>=3.0.0
+# pytest-timeout>=2.1.0
+# pytest-benchmark>=4.0.0
+
+# ============================================================================
+# DEVELOPMENT TOOLS (Optional)
+# ============================================================================
+# black>=23.3.0  # Code formatting
+# flake8>=6.0.0  # Linting
+# isort>=5.10.0  # Import sorting
+# mypy>=1.3.0  # Type checking
+
+# ============================================================================
+# DOCUMENTATION (Optional)
+# ============================================================================
+# sphinx>=4.5.0
+# sphinx-rtd-theme>=1.0.0
+
+# ============================================================================
+# ADVANCED FEATURES (Optional)
+# ============================================================================
+# horovod>=0.28.0  # Multi-GPU distributed training
+# py-spy>=0.3.14  # Advanced Python profiler
+# memory_profiler>=0.61.0  # Memory profiling
+
+# ============================================================================
+# INSTALLATION NOTES
+# ============================================================================
+# 1. Install CUDA Toolkit 12.4+ from NVIDIA
+# 2. Install cuDNN 8.9+ from NVIDIA
+# 3. Install TensorRT 10.12+ from NVIDIA
+# 4. Install PyTorch with CUDA:
+#    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+# 5. Install remaining dependencies:
+#    pip install -r requirements.txt
+# 6. For testing:
+#    pip install -r requirements-test.txt
+#
+# For automated installation, run: ./setup.sh

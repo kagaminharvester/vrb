@@ -1,0 +1,62 @@
+# Quality Profile - Maximum quality, reduced speed
+# Target: 60 FPS minimum, highest quality, larger latency acceptable
+
+profile: quality
+
+gpu:
+  device_id: 0
+  max_vram_usage: 0.95  # Use more VRAM
+  precision: fp32  # Full precision
+  cudnn_benchmark: true
+  cudnn_deterministic: true  # Deterministic results
+  allow_tf32: false  # Disable for maximum precision
+  memory_fraction: null
+
+model:
+  name: sam2_hiera_large
+  checkpoint_path: null
+  config_path: null
+  batch_size: 4  # Smaller batch for quality
+  input_size: [1024, 1024]
+  num_workers: 2
+  prefetch_factor: 2
+
+processing:
+  num_threads: 16  # Fewer threads for stability
+  max_queue_size: 50
+  frame_skip: 0
+  use_multiprocessing: false  # Sequential for quality
+  chunk_size: 50
+  enable_caching: true
+  cache_size_gb: 2.0
+
+performance:
+  target_fps: 60
+  max_latency_ms: 100.0  # Higher latency acceptable
+  enable_profiling: true  # Enable profiling
+  auto_tune: false  # Manual tuning
+  warmup_iterations: 20
+  benchmark_mode: false
+
+output:
+  format: mp4
+  codec: h264_nvenc
+  bitrate: 100M  # High bitrate
+  save_masks: true
+  save_visualizations: true
+  output_dir: ./output
+
+logging:
+  level: DEBUG  # Detailed logging
+  log_dir: ./logs
+  json_logging: true  # Structured logging
+  console_output: true
+  file_output: true
+  max_log_size_mb: 50
+  backup_count: 10
+
+vr:
+  stereoscopic: true
+  ipd: 63.0
+  process_both_eyes: true
+  eye_separation_method: split

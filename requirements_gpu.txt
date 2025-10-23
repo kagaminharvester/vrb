@@ -1,0 +1,52 @@
+# GPU Optimization Requirements
+# VR Body Segmentation Application
+
+# Core Deep Learning Framework
+torch>=2.0.0
+torchvision>=0.15.0
+
+# CUDA Acceleration
+cupy-cuda12x>=12.0.0  # Replace with appropriate CUDA version
+pycuda>=2022.2
+
+# TensorRT (requires manual installation from NVIDIA)
+# Follow: https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html
+# tensorrt>=8.6.0
+# Install via: pip install tensorrt --extra-index-url https://pypi.nvidia.com
+
+# ONNX for model conversion
+onnx>=1.14.0
+onnxruntime-gpu>=1.15.0
+
+# Performance and Monitoring
+nvidia-ml-py3>=11.525.84  # NVIDIA Management Library
+psutil>=5.9.0  # System monitoring
+
+# Data Processing
+numpy>=1.24.0
+opencv-python>=4.7.0
+pillow>=9.5.0
+
+# Visualization and Analysis
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Configuration Management
+pyyaml>=6.0
+
+# Utilities
+tqdm>=4.65.0
+colorlog>=6.7.0
+
+# Optional: Multi-GPU support
+# horovod>=0.28.0  # Distributed training
+
+# Optional: Advanced profiling
+# py-spy>=0.3.14  # Python profiler
+# memory_profiler>=0.61.0  # Memory profiling
+
+# Development Tools (optional)
+# pytest>=7.3.0
+# black>=23.3.0
+# flake8>=6.0.0
+# mypy>=1.3.0

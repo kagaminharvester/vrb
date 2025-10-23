@@ -1,0 +1,65 @@
+{
+  "pipeline": {
+    "input_video_path": "/path/to/input/vr_video.mp4",
+    "output_video_path": "/path/to/output/vr_video_segmented.mp4",
+    "enable_stereo_processing": true,
+    "save_masks_separately": true,
+    "mask_output_path": "/path/to/output/vr_video_masks.mp4",
+    "create_visualization": true,
+    "visualization_mode": "overlay"
+  },
+  "model": {
+    "model_name": "deeplabv3",
+    "model_path": null,
+    "device": "cuda",
+    "use_fp16": true,
+    "use_tensorrt": false,
+    "use_torch_compile": true,
+    "batch_size": 1,
+    "input_size": [1080, 1920],
+    "num_classes": 2,
+    "warmup_iterations": 10
+  },
+  "preprocessing": {
+    "target_size": [1080, 1920],
+    "maintain_aspect": true,
+    "input_color_space": "BGR",
+    "model_color_space": "RGB",
+    "normalize": true,
+    "normalization_mean": [0.485, 0.456, 0.406],
+    "normalization_std": [0.229, 0.224, 0.225]
+  },
+  "postprocessing": {
+    "enable_refinement": true,
+    "enable_edge_smoothing": true,
+    "enable_temporal_filtering": true,
+    "edge_smoothing_kernel": 5,
+    "morphology_kernel_size": 5,
+    "temporal_window_size": 5,
+    "temporal_alpha": 0.3,
+    "min_object_size": 1000,
+    "hole_filling": true
+  },
+  "decoder": {
+    "buffer_size": 30,
+    "use_threading": true,
+    "frame_skip": 0,
+    "decode_mode": "stereo"
+  },
+  "encoder": {
+    "codec": "h264",
+    "quality": "high",
+    "preset": "medium",
+    "hardware_acceleration": true,
+    "pixel_format": "yuv420p"
+  },
+  "stereo": {
+    "enable": true,
+    "method": "weighted",
+    "weight_left": 0.5,
+    "weight_right": 0.5,
+    "consistency_threshold": 0.8,
+    "smoothing_kernel": 5,
+    "temporal_weight": 0.3
+  }
+}

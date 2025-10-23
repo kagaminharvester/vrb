@@ -1,0 +1,69 @@
+# Default Configuration for VR Body Segmentation Application
+# Target Hardware: NVIDIA RTX 3090 (24GB VRAM), AMD Ryzen Threadripper 3990X (128 threads)
+
+profile: balanced
+
+# GPU Configuration
+gpu:
+  device_id: 0
+  max_vram_usage: 0.9  # Use up to 90% of VRAM
+  precision: fp16  # fp32, fp16, int8, mixed
+  cudnn_benchmark: true  # Enable cuDNN auto-tuning
+  cudnn_deterministic: false  # Disable for better performance
+  allow_tf32: true  # Enable TF32 for better performance on Ampere GPUs
+  memory_fraction: null  # Set to limit VRAM usage (null = use max_vram_usage)
+
+# Model Configuration
+model:
+  name: sam2_hiera_large
+  checkpoint_path: null  # Auto-download if null
+  config_path: null  # Auto-download if null
+  batch_size: 8  # Number of frames to process in parallel
+  input_size: [1024, 1024]  # Model input resolution
+  num_workers: 4  # DataLoader workers
+  prefetch_factor: 2  # Frames to prefetch per worker
+
+# Processing Pipeline Configuration
+processing:
+  num_threads: 32  # CPU threads for preprocessing/postprocessing
+  max_queue_size: 100  # Maximum frames in processing queue
+  frame_skip: 0  # Skip every N frames (0 = no skip)
+  use_multiprocessing: true  # Use multiprocessing for CPU tasks
+  chunk_size: 100  # Process video in chunks of N frames
+  enable_caching: true  # Enable result caching
+  cache_size_gb: 4.0  # Maximum cache size in GB
+
+# Performance Configuration
+performance:
+  target_fps: 90  # Target frame rate for VR
+  max_latency_ms: 50.0  # Maximum latency per frame
+  enable_profiling: false  # Enable detailed profiling
+  auto_tune: true  # Automatically tune parameters
+  warmup_iterations: 10  # Warmup iterations before benchmarking
+  benchmark_mode: false  # Enable benchmark mode
+
+# Output Configuration
+output:
+  format: mp4  # Output format: mp4, avi, mov, mkv
+  codec: h264_nvenc  # Video codec (use NVENC for GPU encoding)
+  bitrate: 50M  # Output bitrate
+  save_masks: true  # Save segmentation masks
+  save_visualizations: true  # Save visualizations
+  output_dir: ./output  # Output directory
+
+# Logging Configuration
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  log_dir: ./logs  # Log directory
+  json_logging: false  # Use JSON logging format
+  console_output: true  # Enable console output
+  file_output: true  # Enable file output
+  max_log_size_mb: 10  # Maximum log file size
+  backup_count: 5  # Number of backup log files
+
+# VR-Specific Configuration
+vr:
+  stereoscopic: true  # Process stereoscopic video
+  ipd: 63.0  # Interpupillary distance (mm)
+  process_both_eyes: true  # Process both eyes separately
+  eye_separation_method: split  # split or metadata
